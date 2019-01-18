@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1547804750414.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2069948298",
+    "id" : "4859C178",
+    "lastKnownWriteTime" : 1547809841,
+    "last_content_update" : -2147483648,
+    "path" : "D:/Dati/vito.tranquillo/gitProject/PRC2018005/ShinyAPP/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+        "cursorPosition" : "4,39",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
