@@ -1,28 +1,19 @@
 
-server<-function(input, output) {
+server<-function(input, output, session) {
   theme_set(theme_bw())
-  df<-reactive({      
-  sheet <- gs_read(dati, ws="dataset" )
-  # #df<-gs_read_csv(sheet)
-  # sheet %>% 
-  #   mutate(UO=ifelse(ZONA=='BINAGO', "U.O.5", 
-  #         ifelse(ZONA=="PAVIA", "U.O.6", 
-  #         ifelse(ZONA=="Sondrio media valle","U.O.2",
-  #         ifelse(ZONA=="Sondrio alta valle","U.O.2",
-  #         ifelse(ZONA=="Sondrio bassa valle", "U.O.2",
-  #         ifelse(ZONA=="LECCO"|ZONA=="Lecco"|ZONA=="Lecco alpi","U.O.2",
-  #         ifelse(ZONA=="Alto lario"|ZONA=="Sondrio Valchiavenna"|ZONA=="Sondrio valchiavenna"|
-  #                  ZONA=="Alto Lario", "U.O.2", "U.O.1"))))))))%>% 
-  #   dplyr::select(IDcamp,IDceppo,UO, ZONA,SPECIE,identificazione,colistina,ceftiofur,tilmicosina,kanamicina,enrofloxacin,oxacillina,
-  #          eritromicina,gentamicina,tetraciclina,ampicillina, Specieagg, area)
-  })
   
-  output$dati<- DT::renderDataTable(
-    df(),  rownames = FALSE, options = list(
-      autoWidth = TRUE,columnDefs = list(list(width = '5%', targets = list(6:15)))
-  ))
+  # df<-reactive({      
+  # sheet <- gs_read(dati, ws="dataset" )
+  #   
+  # })
+  # 
+  # output$dati<- DT::renderDataTable(
+  #   loadData(),  rownames = FALSE, options = list(
+  #     autoWidth = TRUE,columnDefs = list(list(width = '5%', targets = list(6:15)))
+  # ))
   
-  df2<-reactive({      
+  df2<-reactive({ 
+    dati<-gs_title("prc2018005")
     sheet2 <- gs_read(dati, "UO")
   })
   
@@ -50,144 +41,14 @@ server<-function(input, output) {
       dplyr::select(c(2,3,9))
   )
   
-#   x<-reactive({
-#     df() %>% 
-#       group_by(IDcamp, Specieagg, ZONA, UO) %>%
-#       filter(!is.na(ZONA)) %>% 
-#       summarise()})
-#   
-#   
-#   output$campioni<-renderRpivotTable({
-#     rpivotTable(x(), col="SPECIE", rows=c("UO","ZONA"), rendererName = "Heatmap")
-#   })
-# 
-#   
-#   output$summ<-renderRpivotTable({  
-#     df() %>% 
-#       dplyr::select(IDcamp, Specieagg, area, UO,identificazione) %>% 
-#       filter(!is.na(identificazione)) %>% 
-#     rpivotTable(df(),aggregatorName="Count",rendererName = "Heatmap",
-#                 col="identificazione", rows="Specieagg") 
-#   } )
-#   
-#   resistenza<-reactive({ 
-#     tot<-ds %>% 
-#     dplyr::select(IDceppo,c(12:22)) %>% 
-#     gather(antibiotico, esito, 3:12) %>% 
-#     group_by(identificazione, antibiotico) %>% 
-#     summarise("n"=n()) 
-#   res<-ds %>% 
-#     dplyr::select(IDceppo,c(12:22)) %>% 
-#     gather(antibiotico, esito, 3:12) %>% 
-#     group_by(identificazione, antibiotico) %>% 
-#     filter(esito=='R') %>% 
-#     summarise("r"=n())  
-#   z<-tot %>% full_join(res)%>% 
-#     replace_na(list(r=0)) %>% 
-#     mutate("%resistenti"=(r/n)*100) %>% 
-#     #filter(identificazione==input$ceppo) %>% 
-#     filter(!is.na(identificazione)) %>% 
-#     as.data.frame()
-#     })
-#   
-#  output$plotRes<-renderPlot(
-#    
-#    # resistenza() %>% 
-#    # filter(identificazione==input$ceppo) %>% 
-#    #   arrange(`%resistenti`) %>% 
-#    #   mutate(antibiotico = factor(antibiotico, unique(antibiotico))) %>% 
-#    # ggplot(aes(x=antibiotico,`%resistenti` ))+geom_bar(stat = 'identity', fill="steelblue")+coord_flip()
-#    resistenza()%>% 
-#      filter(identificazione==input$ceppo) %>% 
-#      arrange(`%resistenti`) %>% 
-#      mutate(`%resistenti`= round(`%resistenti`,1)) %>% 
-#      mutate(antibiotico = factor(antibiotico, unique(antibiotico))) %>% 
-#      ggplot(aes(x=antibiotico,y=`%resistenti`,label=`%resistenti`))+
-#      geom_point(stat='identity',col="snow2", size=8)+
-#      geom_text(color="black", size=3)+
-#      geom_segment(aes(x=antibiotico, 
-#                       xend=antibiotico, 
-#                       # y=min(`%resistenti`),
-#                       y=0,
-#                       yend=`%resistenti`-2 
-#                   # linetype="dashed", 
-#                  #
-#                  ))+
-#      labs(title="% di ceppi resistenti",caption=Sys.Date()) +  
-#      coord_flip()
-#    
-#  )
-#  
-#  
-# heatm<-reactive({      
-#   totx<-ds %>%   
-#    dplyr::select(IDceppo,SPECIE,c(12:22)) %>% 
-#    gather(antibiotico, esito, 4:13) %>% 
-#    group_by(SPECIE,identificazione, antibiotico) %>% 
-#    summarise("n"=n())
-#  resx<-ds %>% 
-#    dplyr::select(IDceppo,SPECIE, c(12:22)) %>% 
-#    gather(antibiotico, esito, 4:13) %>% 
-#    group_by(SPECIE,identificazione, antibiotico) %>% 
-#    filter(esito=='R') %>% 
-#    summarise("r"=n())
-#  
-#  x<-totx %>% full_join(resx)%>% 
-#    #factor(identificazione,antibiotico) %>% 
-#    replace_na(list(r=0)) %>% 
-#    mutate("%resistenti"=(r/n)*100) %>% 
-#    #filter(identificazione=="Acinetobacter") %>% 
-#    as.data.frame() 
-# })
-#  
-#   
-#   output$hmap<-renderPlot(
-#     heatm() %>% 
-#       filter(SPECIE==input$specie) %>% 
-#       arrange(`%resistenti`) %>% 
-#       mutate(antibiotico = factor(antibiotico, unique(antibiotico))) %>% 
-#      ggplot(aes(antibiotico,identificazione)) + 
-#       geom_tile(aes(fill = `%resistenti`), colour = "white") + 
-#       scale_fill_gradient(low = "snow2", high = "steelblue")+ theme_grey(base_size = 9) + 
-#             labs(x = "", y = "", title="profilo di resistenza dei ceppi", caption=Sys.Date()) + 
-#             scale_x_discrete(expand = c(0, 0)) +
-#             scale_y_discrete(expand = c(0, 0)) 
-#     )
-# 
-#   
-# 
-#   
-#    output$MAR<-renderPlot(
-#      
-#   
-# 
-#   ds2 %>% 
-#     dplyr::select(ZONA,SPECIE, identificazione, 13:22) %>%
-#     filter(!is.na(identificazione)) %>%
-#     adorn_totals("col")  %>%
-#     filter(ZONA==input$zona) %>% 
-#     group_by(SPECIE) %>%
-#     summarise(n=n(),
-#               MAR=sum(Total)/(n*10)
-#     ) %>%
-#     mutate(MAR=round(MAR, 2)) %>%
-#     arrange(MAR) %>%
-#     mutate(SPECIE = factor(SPECIE, unique(SPECIE))) %>%
-#     ggplot(aes(x=SPECIE, y=MAR, label=MAR))+
-#     geom_point(stat='identity',col="snow2", size=8)+
-#     geom_text(color="black", size=3)+
-#     geom_segment(aes(x=SPECIE,
-#                      xend=SPECIE,
-#                      # y=min(`%resistenti`),
-#                      y=0,
-#                      yend=MAR-0.009
-#                      # linetype="dashed",
-#                      #
-#     ))+
-#     labs(title="Multiple Antimicrobial Resistance INDEX",caption=Sys.Date()) +
-#     coord_flip()
-#   )
-#   
+  ana<-reactive({ ana<-gs_read(analisi,ws="dati") })
+  
+  output$analisi<- DT::renderDataTable(
+    ana(),  rownames = FALSE, options = list(
+      autoWidth = TRUE,columnDefs = list(list(width = '5%'))
+    ))
+  
+
   
   consumi<-reactive({  
     tabcons() %>% 
@@ -204,6 +65,322 @@ server<-function(input, output) {
  output$timeline <- renderTimevis({
    timevis(timing)
  })
+ 
+ 
+ ########INSERIMENTO DATI- dati aziendali##############
+
+ formData <- reactive({
+      data <- sapply(fieldsAll, function(x) input[[x]])
+      data <- t(data)
+      data
+    })
+
+    saveData <- function(data) {
+      sheet <- gs_title("prc2018005")
+      gs_add_row(sheet, ws="dataset",input = data)
+    }
+
+###azione al click del bottone save data#####
+ observeEvent(input$submit, {
+   saveData(formData())
+   shinyjs::reset("form")
+   output$responsesTable <- DT::renderDataTable(
+   loadData(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = TRUE, lengthChange = FALSE))
+   shinyjs::show("datainputed_msg")
+ })
+ 
+ ###azione al click del bottone inserisci nuovi dati####
+ observeEvent(input$submit_another, {
+   shinyjs::show("form")
+   shinyjs::hide("datainputed_msg")
+ })
+
+ session$onSessionEnded(function() {
+   stopApp()
+   #q("no")
+
+ })
+
+
+ output$responsesTable <- DT::renderDataTable(
+   loadData(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = FALSE, lengthChange = FALSE))
+
+
+ 
+
+ 
+ 
+###################################################################### 
+ 
+# #####INSERIMENTO dati MASSA######################
+
+ formData2 <- reactive({
+   data <- sapply(fieldsAll2, function(x) input[[x]])
+   data <- t(data)
+   data
+ })
+
+ saveData2 <- function(data) {
+   # Grab the Google Sheet
+   sheet <- gs_title("prc2018005")
+   # Add the data as a new row
+   gs_add_row(sheet,ws="massa", input = data)
+ }
+
+ observeEvent(input$submit2, {
+   saveData2(formData2())
+   shinyjs::reset("form2")
+   output$responsesTable2 <- DT::renderDataTable(
+     loadData2(),
+     rownames = FALSE,class = 'cell-border stripe',
+     options = list(searching = FALSE, lengthChange = FALSE
+                    ))
+   shinyjs::show("2datainputed_msg")
+ })
+ observeEvent(input$msubmit_another, {
+   shinyjs::show("form2")
+   shinyjs::hide("2datainputed_msg")
+ })
+
+ session$onSessionEnded(function() {
+   stopApp()
+   #q("no")
+
+ })
+
+
+ output$responsesTable2 <- DT::renderDataTable(
+   loadData2(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = FALSE, lengthChange = FALSE
+                  ))
+
+
+######################Inserimento Dati Sanitari#################
+ formData3 <- reactive({
+   data <- sapply(fieldsAll3, function(x) input[[x]])
+   data <- t(data)
+   data
+ })
+
+ saveData3 <- function(data) {
+   # Grab the Google Sheet
+   sheet <- gs_title("prc2018005")
+   # Add the data as a new row
+   gs_add_row(sheet, ws="san",input = data)
+ }
+
+ observeEvent(input$submit3, {
+   saveData3(formData3())
+   shinyjs::reset("form3")
+   output$responsesTable3 <- DT::renderDataTable(
+     loadData3(),
+     rownames = FALSE,class = 'cell-border stripe',
+     options = list(searching = FALSE, lengthChange = FALSE))
+   shinyjs::show("3datainputed_msg")
+ })
+ observeEvent(input$ssubmit_another, {
+   shinyjs::show("form3")
+   shinyjs::hide("3datainputed_msg")
+ })
+
+ session$onSessionEnded(function() {
+   stopApp()
+   #q("no")
+
+ })
+
+
+ output$responsesTable3 <- DT::renderDataTable(
+   loadData3(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = FALSE, lengthChange = FALSE))
+
+
+
+ 
+######inserimento parassitologico##############
+ 
+ formData4 <- reactive({
+   data <- sapply(fieldsAll4, function(x) input[[x]])
+   data <- t(data)
+   data
+ })
+ 
+ saveData4 <- function(data) {
+   # Grab the Google Sheet
+   sheet <- gs_title("prc2018005")
+   # Add the data as a new row
+   gs_add_row(sheet, ws="par",input = data)
+ }
+ 
+ observeEvent(input$submit4, {
+   saveData4(formData4())
+   shinyjs::reset("form4")
+   output$responsesTable4 <- DT::renderDataTable(
+     loadData4(),
+     rownames = FALSE,class = 'cell-border stripe',
+     options = list(searching = FALSE, lengthChange = FALSE))
+   shinyjs::show("4datainputed_msg")
+ })
+ observeEvent(input$psubmit_another, {
+   shinyjs::show("form4")
+   shinyjs::hide("4datainputed_msg")
+ })
+ 
+ session$onSessionEnded(function() {
+   stopApp()
+   #q("no")
+   
+ })
+ 
+ 
+ output$responsesTable4 <- DT::renderDataTable(
+   loadData4(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = FALSE, lengthChange = FALSE))
+ 
+ 
+ 
+ 
+####inserimento diagnostica#####
+ 
+ formData5 <- reactive({
+   data <- sapply(fieldsAll5, function(x) input[[x]])
+   data <- t(data)
+   data
+ })
+ 
+ saveData5 <- function(data) {
+   # Grab the Google Sheet
+   sheet <- gs_title("prc2018005")
+   # Add the data as a new row
+   gs_add_row(sheet, ws="diagn",input = data)
+ }
+ 
+ observeEvent(input$submit5, {
+   saveData5(formData5())
+   shinyjs::reset("form5")
+   output$responsesTable5 <- DT::renderDataTable(
+     loadData5(),
+     rownames = FALSE,class = 'cell-border stripe',
+     options = list(searching = FALSE, lengthChange = FALSE))
+   shinyjs::show("5datainputed_msg")
+ })
+ observeEvent(input$dsubmit_another, {
+   shinyjs::show("form5")
+   shinyjs::hide("5datainputed_msg")
+ })
+ 
+ session$onSessionEnded(function() {
+   stopApp()
+   #q("no")
+   
+ })
+ 
+ 
+ output$responsesTable5 <- DT::renderDataTable(
+   loadData5(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = FALSE, lengthChange = FALSE))
+ 
+ 
+ #####inserimento benessere#############
+ 
+ formData6 <- reactive({
+   data <- sapply(fieldsAll6, function(x) input[[x]])
+   data <- t(data)
+   data
+ })
+ 
+ saveData6 <- function(data) {
+   # Grab the Google Sheet
+   sheet <- gs_title("prc2018005")
+   # Add the data as a new row
+   gs_add_row(sheet, ws="ben",input = data)
+ }
+ 
+ observeEvent(input$submit6, {
+   saveData6(formData6())
+   shinyjs::reset("form6")
+   output$responsesTable6 <- DT::renderDataTable(
+     loadData6(),
+     rownames = FALSE,class = 'cell-border stripe',
+     options = list(searching = FALSE, lengthChange = FALSE))
+   shinyjs::show("6datainputed_msg")
+ })
+ observeEvent(input$bsubmit_another, {
+   shinyjs::show("form6")
+   shinyjs::hide("6datainputed_msg")
+ })
+ 
+ session$onSessionEnded(function() {
+   stopApp()
+   #q("no")
+   
+ })
+ 
+ 
+ output$responsesTable6 <- DT::renderDataTable(
+   loadData6(),
+   rownames = FALSE,class = 'cell-border stripe',
+   options = list(searching = FALSE, lengthChange = FALSE))
+ 
+ 
+##################################################################
+##################################################################
+ 
+ output$t1<-renderTable(
+   
+   d1 %>% 
+     filter(azienda==input$codaz) %>% 
+     select(-azienda)
+ )
+
+ output$t2<-renderTable(
+   
+   d2 %>% 
+     filter(azienda==input$codaz) %>% 
+     select(-azienda)
+ )
+
+ output$t3<-renderTable(
+  
+  d3 %>% 
+     filter(azienda==input$codaz) %>% 
+     select(-azienda)
+ )
+
+ output$t4<-renderTable(
+  
+   d4 %>% 
+     filter(azienda==input$codaz) %>% 
+     select(-azienda)
+ )
+
+ output$t5<-renderTable(
+ 
+   d5 %>% 
+     filter(azienda==input$codaz) %>% 
+     select(-azienda)
+ )
+
+ output$t6<-renderTable(
+  
+  d6 %>% 
+     filter(azienda==input$codaz) %>% 
+     select(-azienda)
+ )
+ 
+ 
+ 
+ 
+ 
+ 
  
  
 }

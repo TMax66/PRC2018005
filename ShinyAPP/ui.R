@@ -1,8 +1,10 @@
 
 ui<-navbarPage("PRC2018005",
+               
+  ########PANEL DESCRIZIONE PROGETTO#####             
                tabPanel("Descrizione",
                         fluidPage(
-                          fluidRow(),
+                          #fluidRow(),
                           fluidRow(
                             tabsetPanel(type="tabs",
                                         tabPanel("Dati identificativi del progetto", includeHTML("generale.html")),
@@ -12,17 +14,18 @@ ui<-navbarPage("PRC2018005",
                                         tabPanel("Metodologia",includeHTML("d3.html")),
                                         tabPanel("Trasferibilità e diffusione dei risultati",includeHTML("d4.html")),
                                         tabPanel("Valore aggiunto",includeHTML("d5.html")),
-                                        tabPanel("Fasi del progetto", includeHTML("d6.html")),
-                                        tabPanel("Risorse",
-                                                 br(),
-                                                 br(),
-                                                 column(12, div(align="center",
-                                                 tableOutput("risorse")))),
-                                        tabPanel("Timing",
-                                                 br(),
-                                                 br(),
-                                                 hr(),
-                                                 timevisOutput("timeline"),hr())
+                                        tabPanel("Fasi del progetto", includeHTML("d6.html"))
+                                        #,
+                                        # tabPanel("Risorse",
+                                        #          br(),
+                                        #          br(),
+                                        #          column(12, div(align="center",
+                                        #          tableOutput("risorse")))),
+                                        # tabPanel("Timing",
+                                        #          br(),
+                                        #          br(),
+                                        #          hr(),
+                                        #          timevisOutput("timeline"),hr())
                                         
                                         
                                         )
@@ -42,168 +45,582 @@ ui<-navbarPage("PRC2018005",
                            )
                ),
                
-               
-               
-               
-               
-               tabPanel("Dataset",
-                        fluidPage(
-                          fluidRow(
-                            column(12, div(align="center",
-                                           DT::dataTableOutput("dati")))
-                          )
-                        )
-                        ),
-              tabPanel("Risultati",
-                       fluidPage(
-                         fluidRow(
-                        "In questa sezione vengono riportati i risultati preliminari generati e aggiornati", 
-                         "costantemente a partire dal dataset.",
-                        br()
-                       
-                         
-                           
-                         ),
-                        
-                        helpText(tags$strong("dati aggiornati al", Sys.Date())),
-                        
-                        tabsetPanel(type = "tabs",
+  tabPanel("Inserimento dati",
+                     fluidPage(
+                       fluidRow(
+                         tabsetPanel(type="tabs",
+                           ######dati aziendali
+                           tabPanel("Dati aziendali",
 
-                             tabPanel("Campioni", 
-                        br(),
+                             div(id = "form",
 
-                        fluidRow(
-                          tags$p("In questa tabella è riportato il numero di campioni di feci esaminati",
-                                 "classificabili in base a SPECIE, ZONA di provenienza e U.O."),
-                          tags$p("La tabella è interattiva è può essere strutturata come si preferisce"),
-  
-                        rpivotTableOutput("campioni"))),
-                        
-                        tabPanel("Ceppi", 
-                        br(),
-  
-                        
-                        
-                        fluidRow(
-                          tags$p("In questa tabella è riportato il numero di ceppi di Enterobacteriacee isolati dai campioni di feci ",
-                                 "ed identificati mediante gallerie biochimiche, classificati secondo la SPECIE e la ZONA di provenienza delle feci "),
-            
-                          tags$p("La tabella è interattiva è può essere strutturata come si preferisce"),
-                  
-                           
-                           rpivotTableOutput("summ")
-                           
-                           
-                           
-                         )), 
-                        # br(),
-                        # br(),
-                        # hr(),
-                        
-                        tabPanel("Antibiotico resistenza", 
-                                 br(),
-                        fluidRow(
-                          column(4, div(
-                                       br(),
-                                          selectInput("ceppo", "CEPPO",
-                                                      c(unique(as.character(ds$identificazione
-                                        )))),
-                                       br(),
-                                       tags$p("Il barplot a destra riporta per ogni ceppo selezionato la % di ceppi isolati resistenti ai diversi antibiotici testati")
-                                       
-                                       )),
-                       
-                          column(6, div(align='center',
-                                        br(),
-                                        plotOutput("plotRes")
-                                        ))
-                        ),
-                        hr(),
-                        br(),
-                        fluidRow(
-                          column(4, div(
-                            br(),
-                            selectInput("specie", "SPECIE",
-                                        c(unique(as.character(ds$SPECIE
-                                        )))),
-                            br(),
-                            
-                            tags$p("Il grafico a destra riporta sotto forma di heatmap il profilo di resistenza ( % di ceppi resistenti)",
-                           "dei singoli generi, dopo aver selezionato la SPECIE d'interesse")
-                            
-                            )),
-                          
-                          column(6, div(align='center',
-                                        br(),
-                                       
-                                        plotOutput("hmap")))
+                           fluidRow(
+                             column(2,
+                                    textInput("mese", "Mese", value = "")),
 
-                          
-                        )
-                         
-                       ), 
-                       
-                       tabPanel("Multiple Antimicrobial Resistance Index",
-                                br(),
-                                br(),
-                                fluidRow(column(4,
-                                  div(
-                                    selectInput("zona", "Area di campionamento", selected="BINAGO",
-                                                c(unique(as.character(ds$ZONA
-                                                )))),
-                                      br(), br(), br(), br(), br(), br(),
-                                      tags$p("Questo indice è una misura della pressione selettiva esercitata dagli antimicrobici",
-                                             "sulle popolazioni batteriche di una determinata specie o ambiente." ,
-                                             "Valori >0.20 indicano una pressione selettiva elevata che spiega la resistenza multipla osservata.",
-                                             "Sui dati del progetto Il MAR Index viene calcolato per le differenti specie di",
-                                             "animali selvatici campionati, condizionalmente all'area di provenienza",
-                                             "Si tratta di un indice molto utilizzato in letteratura come strumento descrittivo e di confronto"
-                                              )))
-                                ,
-                                
-                                
-                               column(6,
-                                  div(align="center",
-                                      plotOutput("MAR"))))
-              
-                       )))),
-              
-              
-              
-              
-              tabPanel("Utilizzo risorse",
-                       
-                       fluidPage(
-                         
-                         fluidRow(
-                          
-                           tabsetPanel(type = "tabs",
-                                         tabPanel("U.O.1",
-                                                  br(),
-                                                  br(),
-                                                  helpText("Materiali di consumo"),
-                                                  br(),
-                                                  br(),
-                                                  tableOutput("consumi"),
-                                                  br(),
-                                                  hr(),
-                                                  helpText("Dettaglio consumi"),
-                                                  tableOutput("cons")
-                                                ),
-                                        
-                                                tabPanel("U.O.2", "No dati"),
-                                       tabPanel("U.O.3", "No dati")
-                                       
-                                       ))))
-              
+                             column(2,
+                                    textInput( "azienda","Azienda",value="")
+                             ),
+                             column(2,
+                                    textInput( "ncapre","N. capre in lattazione", value = "")
+                             ),
+                             column(2,
+                                    textInput( "capog","Kg/capo/die", value = "")
+                             ),
+                             column(2,
+                                    textInput( "adultdead","N.capre adulte morte", value = "")
+                             ),
+                             column(2,
+                                    textInput("puppydead", "N.capretti morti", value = "")
+                             )
+
+                           ),
+
+                           fluidRow(
+
+                             column(2,
+                                    textInput( "rim","N.rimonta morte", value = "")),
+                             column(2,
+                                    textInput( "abo","N.aborti", value = "")),
+                             column(2,
+                                    textInput("ter", "N.terapie/lattazione", value = "")),
+                             column(2,
+                                    textInput("asc", "N.terapie/asciutta", value = "")),
+
+                             column(2,
+                                    textInput("trim", "N.terapie/rimonta", value = "")),
+                             column(2,
+                                    textInput("tpuppy", "N.terapie/capretti", value = "")),
+
+
+
+
+                           fluidRow(
+                             column(9,div(align="center",actionButton("submit", "Salva", class = "btn-primary")
+
+                             )),
+
+                             column(3, shinyjs::hidden(
+                               div(
+                                 id = "datainputed_msg",
+                                 "Dati inseriti",
+                                 actionLink("submit_another", "Inserisci altri dati")
+                               )
+                             )
+                             )),
+                           
+                           hr(),
+                           div(
+                             
+                             p("",
+                               a(href="https://docs.google.com/spreadsheets/d/1kJTXGh4op0gawkiVkLchfbFn5Mb_E8oMqbHNDnQ_Iks/edit?usp=sharing",target="_blank",
+                                 "Modifica dati"),align="center", style = "font-size:12pt")
+                           ),
+                           hr(),
+                           
+                           
+
+
+                           fluidRow(
+                             column(1
+                             ),
+                             column(10,DT::dataTableOutput("responsesTable")),
+                             column(1)
+                           )
+
                        )
+                     )),
+                     #####dati latte######
+                     tabPanel("Qualità latte",
+
+                       div(id = "form2",
+                          fluidRow(
+                            column(2,
+                                   textInput("mmese", "Mese", value = "")),
+                            
+                            column(2,
+                                   textInput( "mazienda","Azienda",value="")
+                            ),
+
+                            column(2,
+                                   textInput("scc", "SCC", value = "")),
+
+                            column(2,
+                                   textInput("prot", "Proteine", value = "")),
+
+
+                            column(2,
+                                   textInput("cas", "Caseine", value = "")),
+
+                            column(2,
+                                   textInput("grasso", "Grasso", value = "")),
+                            column(2,
+                                   textInput("latt", "Lattosio", value = "")),
+                            column(2,
+                                   textInput("cbt", "CBT", value = "")),
+                            column(2,
+                                   textInput("stau", "STAU", value = "")),
+                            
+                            column(2,
+                                   textInput("ureaFTIR", "UreaFTIR", value = "")),
+                            column(2,
+                                   textInput("ureapHm", "UreapHm", value = "")),
+                            column(2,
+                                   textInput("inib", "Inibenti", value = "")),
+
+
+                            fluidRow(
+                              column(9,div(align="center",actionButton("submit2", "Salva", class = "btn-primary")
+
+                              )),
+
+                              column(3, shinyjs::hidden(
+                                div(
+                                  id = "2datainputed_msg",
+                                  "Dati inseriti",
+                                  actionLink("msubmit_another", "Inserisci altri dati")
+                                )
+                              )
+                              )),
+                            
+                            hr(),
+                            div(
+                              
+                              p("",
+                                a(href="https://docs.google.com/spreadsheets/d/1kJTXGh4op0gawkiVkLchfbFn5Mb_E8oMqbHNDnQ_Iks/edit?usp=sharing",target="_blank",
+                                  "Modifica dati"),align="center", style = "font-size:12pt")
+                            ),
+                            hr(),
+
+                            fluidRow(
+                              column(1
+                              ),
+                              column(10,DT::dataTableOutput("responsesTable2")),
+                              column(1)
+                            )
+                            
+
+
+                                   )
+                       )
+
+
+                     ),
+                     tabPanel("Dati sanitari",
+
+                              div(id = "form3",
+                                  fluidRow(
+                                    column(2,
+                                           textInput("smese", "Mese", value = "")),
+
+                                    column(2,
+                                           textInput( "sazienda","Azienda",value="")),
+
+                                    column(2,
+                                           textInput("parat", "Paratbc", value = "")),
+
+                                    column(2,
+                                           textInput("agal", "Agalassia", value = "")),
+
+
+                                    column(2,
+                                           textInput("caev", "CAEV", value = "")),
+
+                                    column(2,
+                                           textInput("ascessi", "Mal.Ascessi", value = "")),
+                                    column(2,
+                                           textInput("mast", "Mastite", value = "")),
+
+                                    fluidRow(
+                                      column(9,div(align="center",actionButton("submit3", "Salva", class = "btn-primary")
+
+                                      )),
+
+                                      column(3, shinyjs::hidden(
+                                        div(
+                                          id = "3datainputed_msg",
+                                          "Dati inseriti",
+                                          actionLink("ssubmit_another", "Inserisci altri dati")
+                                        )
+                                      )
+                                      )),
+                                    hr(),
+                                    div(
+                                      
+                                      p("",
+                                        a(href="https://docs.google.com/spreadsheets/d/1kJTXGh4op0gawkiVkLchfbFn5Mb_E8oMqbHNDnQ_Iks/edit?usp=sharing",target="_blank",
+                                          "Modifica dati"),align="center", style = "font-size:12pt")
+                                    ),
+                                    hr(),
+
+                                    fluidRow(
+                                      column(1
+                                      ),
+                                      column(10,DT::dataTableOutput("responsesTable3")),
+                                      column(1)
+                                    )
+
+
+                                  )
+                              )
+
+                     ),
+
+                     tabPanel("Parassitologico",
+                      
+                      div(id = "form4",
+                          fluidRow(
+                            column(2,
+                                   textInput("pmese", "Mese", value = "")),
+                            
+                            column(2,
+                                   textInput( "pazienda","Azienda",value="")),
+                            
+                            column(2,
+                                   selectInput("cat", "Categoria", 
+                                               choices = c("Capretti", "Adulti", "Rimonta"),
+                                             selected = "")),
+                            
+                            column(2,
+                                   textInput("coccidi", "Coccidi", value = "")),
+                            
+                            
+                            column(2,
+                                   textInput("strGE", "StrGE", value = "")),
+                            
+                            column(2,
+                                   textInput("strPO", "StrPO", value = "")),
                          
-                
-                       
+                            
+                            fluidRow(
+                              column(9,div(align="center",actionButton("submit4", "Salva", class = "btn-primary")
+                                           
+                              )),
+                              
+                              column(3, shinyjs::hidden(
+                                div(
+                                  id = "4datainputed_msg",
+                                  "Dati inseriti",
+                                  actionLink("psubmit_another", "Inserisci altri dati")
+                                )
+                              )
+                              )),
+                            hr(),
+                            div(
+                              
+                              p("",
+                                a(href="https://docs.google.com/spreadsheets/d/1kJTXGh4op0gawkiVkLchfbFn5Mb_E8oMqbHNDnQ_Iks/edit?usp=sharing",target="_blank",
+                                  "Modifica dati"),align="center", style = "font-size:12pt")
+                            ),
+                            hr(),
+                            
+                            fluidRow(
+                              column(1
+                              ),
+                              column(10,DT::dataTableOutput("responsesTable4")),
+                              column(1)
+                            )
+                            
+                            
+                          )
+                      )
+                      
+                     ),
+                     
+                     
+                     
+                     
+                     tabPanel("Diagnostica",
+                              
+                              div(id = "form5",
+                                  fluidRow(
+                                    column(2,
+                                           textInput("dmese", "Mese", value = "")),
+                                    
+                                    column(2,
+                                           textInput( "dazienda","Azienda",value="")),
+                                    
+                                    column(2,
+                                           selectInput("dcat", "Categoria", 
+                                                       choices = c("Capretti", "Adulti", "Rimonta"),
+                                                       selected = "")),
+                                    
+                                    column(2,
+                                           textInput("necro", "Necroscopia", value = "")),
+                                    
+                                    
+                                    column(2,
+                                           textInput("bat", "Batteriologico", value = "")),
+                                    
+                                    column(2,
+                                           textInput("diagnosi", "Diagnosi", value = "")),
+                                    
+                                    
+                                    
+                                    fluidRow(
+                                      column(9,div(align="center",actionButton("submit5", "Salva", class = "btn-primary")
+                                                   
+                                      )),
+                                      
+                                      column(3, shinyjs::hidden(
+                                        div(
+                                          id = "5datainputed_msg",
+                                          "Dati inseriti",
+                                          actionLink("dsubmit_another", "Inserisci altri dati")
+                                        )
+                                      )
+                                      )),
+                                    hr(),
+                                    div(
+                                      
+                                      p("",
+                                        a(href="https://docs.google.com/spreadsheets/d/1kJTXGh4op0gawkiVkLchfbFn5Mb_E8oMqbHNDnQ_Iks/edit?usp=sharing",target="_blank",
+                                          "Modifica dati"),align="center", style = "font-size:12pt")
+                                    ),
+                                    hr(),
+                                    
+                                    fluidRow(
+                                      column(1
+                                      ),
+                                      column(10,DT::dataTableOutput("responsesTable5")),
+                                      column(1)
+                                    )
+                                    
+                                    
+                                  )
+                              )
+                              
+                     ),
+                     
+                     
+                     
+                     
+                     tabPanel("Benessere",
+                              
+                              div(id = "form6",
+                                  fluidRow(
+                                    column(2,
+                                           textInput("bmese", "Mese", value = "")),
+                                    
+                                    column(2,
+                                           textInput( "bazienda","Azienda",value="")),
+                                    
+                                
+                                    
+                                    column(2,
+                                           textInput("bcompl", "ComplBen", value = "")),
+                                    
+                                    
+                                    column(2,
+                                           textInput("A", "Area A", value = "")),
+                                    
+                                    column(2,
+                                           textInput("B", "Area B", value = "")),
+                                    column(2,
+                                           textInput("C", "Area C", value = "")),
+                                    column(2,
+                                           textInput("Biosic", "Biosic", value = "")),
+                                    column(2,
+                                           textInput("GR", "GR", value = "")),
+                                    
+                                    
+                                    
+                                    fluidRow(
+                                      column(9,div(align="center",actionButton("submit6", "Salva", class = "btn-primary")
+                                                   
+                                      )),
+                                      
+                                      column(3, shinyjs::hidden(
+                                        div(
+                                          id = "6datainputed_msg",
+                                          "Dati inseriti",
+                                          actionLink("bsubmit_another", "Inserisci altri dati")
+                                        )
+                                      )
+                                      )),
+                                    hr(),
+                                    div(
+                                      
+                                      p("",
+                                        a(href="https://docs.google.com/spreadsheets/d/1kJTXGh4op0gawkiVkLchfbFn5Mb_E8oMqbHNDnQ_Iks/edit?usp=sharing",target="_blank",
+                                          "Modifica dati"),align="center", style = "font-size:12pt")
+                                    ),
+                                    hr(),
+                                    
+                                    fluidRow(
+                                      column(1
+                                      ),
+                                      column(10,DT::dataTableOutput("responsesTable6")),
+                                      column(1)
+                                    )
+                                    
+                                    
+                                  )
+                              )
+                              
+                     )
+                     )
+                     ),
+
+           shinyjs::useShinyjs()
+                    )),
+  tabPanel("Visualizza dati per azienda",
+           fluidPage(
+             sidebarPanel(
+               textInput("codaz", "Azienda", "")
+ 
+             ),
+             
+             mainPanel(
+               hr(),
+               fluidRow(
+                 column(12, 
+               p("dati aziendali")
+               ,
                
-      
-                          
-                          
-                          
-                
+               tableOutput("t1"))
+               
+             ),
+             hr(),
+             fluidRow(
+               column(12,
+                      p("latte di massa"),
+                      tableOutput("t2"))
+             ),
+             
+             hr(),
+             fluidRow(
+               column(12,
+                      p("dati sanitari"),
+                      tableOutput("t3"))
+             ),
+             hr(),
+             fluidRow(
+               column(12,
+                      p("Parassitologico"),
+                      tableOutput("t4"))
+             ),
+             hr(),
+             fluidRow(
+               column(12,
+                      p("Diagnostica"),
+                      tableOutput("t5"))
+             ),
+             hr(),
+             fluidRow(
+               column(12,
+                      p("Benessere"),
+                      tableOutput("t6"))
+             )
+             
+             
+             
+             )
+             
+             
+           )
+           
+           
+           
+           
+           
+           
+           
+           )
+            
+           
+  )
+               
+               
+               
+######INSERIMENTO DATI########
+
+# tabPanel("Inserimento dati",
+#          div(id = "form",
+#              fluidPage(
+#                sidebarPanel(
+#                  
+#                  # textInput("azienda", "Azienda", ""),
+#                  # 
+#                  # dateInput("dtrisk","Data compilazione", value = Sys.Date(),format = "dd-mm-yyyy"),
+#                  
+#                  selectInput("settore", "Settore", 
+#                              c("Dati Aziendali","Latte di massa",
+#                                "Stato Sanitario","Benessere"),""),
+#                  br(),
+#                  br(),
+#                  hr(),
+#                  
+#                  
+#                  shinyjs::hidden(
+#                    div(
+#                      id = "datainputed_msg",
+#                      "Dati inseriti",
+#                      actionLink("submit_another", "Inserisci un'altra scheda")
+#                    )),
+#                  
+#                  DT::dataTableOutput("responsesTable")
+#                  
+#                )
+#                
+#                ,
+#                mainPanel(
+#                  wellPanel(
+#                    conditionalPanel(
+#                      condition = "input.settore == 'Dati Aziendali'",
+#                      textInput("mese", "Mese",""),
+#                      textInput( "azienda","Azienda",value=""),
+#                      textInput( "ncapre","N. capre in lattazione", value = ""),
+#                      textInput( "capog","Kg/capo/die", value = ""),
+#                      textInput( "adultdead","N.capre adulte morte", value = ""),
+#                      textInput("puppydead", "N.capretti morti", value = ""),
+#                      textInput( "rim","N.rimonta morte", value = ""),
+#                      textInput( "abo","N.aborti", value = ""),
+#                      textInput("asc", "N.terapie/asciutta", value = ""),
+#                      textInput("trim", "N.terapie/rimonta", value = ""),
+#                      textInput("tpuppy", "N.terapie/capretti", value = "")
+# 
+#                    ),
+#                    conditionalPanel(
+#                      condition = "input.settore == 'Latte di massa'",
+#                      # textInput("mese", "Mese",""),
+#                      # textInput( "azienda","Azienda",value=""),
+#                      textInput("scc", "SCC", value = ""),
+#                      textInput("prot", "Proteine", value = ""),
+#                      textInput("cas", "Caseine", value = ""),
+#                      textInput("grasso", "Grasso", value = ""),
+#                      textInput("latt", "Lattosio", value = ""),
+#                      textInput("cbt", "CBT", value = ""),
+#                      textInput("urea", "Urea", value = ""),
+#                      textInput("inib", "Inibenti", value = "")
+# 
+#                    ),
+#                    conditionalPanel(
+#                      condition = "input.settore == 'Stato Sanitario'",
+#                      # textInput("mese", "Mese", value = ""),
+#                      # textInput( "azienda","Azienda",value=""),
+#                      textInput("parat", "Paratbc", value = ""),
+#                      textInput("agal", "Agalassia", value = ""),
+#                      textInput("caev", "CAEV", value = ""),
+#                      textInput("ascessi", "Mal.Ascessi", value = ""),
+#                      textInput("mast", "Mastite", value = "")
+# 
+#                    ),
+#                    conditionalPanel(
+#                      condition = "input.settore == 'Benessere'",
+#                      textInput("mese", "Azienda",""),
+#                      textInput( "azienda","Azienda",value=""),
+#                      hr(),
+#                      
+#                      actionButton("submit", "Salva", class = "btn-primary")
+#                      
+#                      
+#                    )
+#                    
+#                    
+#                  )#wellpanel
+#                )#mainpanel
+#              )#fluidpage
+#          )#div form2
+# )#,#chiude il tabelPanel
 
