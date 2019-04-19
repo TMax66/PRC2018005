@@ -467,49 +467,54 @@ ui<-navbarPage("PRC2018005",
   tabPanel("Visualizza dati per azienda",
            fluidPage(
              sidebarPanel(
-               textInput("codaz", "Azienda", "")
- 
+               selectInput("codaz", "Codice Aziendale",
+                           c(unique(as.character(d1$azienda))))
              ),
              
              mainPanel(
                hr(),
                fluidRow(
                  column(12, 
-               p("dati aziendali")
+               h2("Dati aziendali")
                ,
-               
+               hr(), 
                tableOutput("t1"))
                
              ),
              hr(),
              fluidRow(
                column(12,
-                      p("latte di massa"),
+                      h2("Latte di massa"),
+                      hr(),
                       tableOutput("t2"))
              ),
              
              hr(),
              fluidRow(
                column(12,
-                      p("dati sanitari"),
+                      h2("Dati sanitari"),
+                      hr(),
                       tableOutput("t3"))
              ),
              hr(),
              fluidRow(
                column(12,
-                      p("Parassitologico"),
+                      h2("Parassitologico"),
+                      hr(),
                       tableOutput("t4"))
              ),
              hr(),
              fluidRow(
                column(12,
-                      p("Diagnostica"),
+                      h2("Diagnostica"),
+                      hr(),
                       tableOutput("t5"))
              ),
              hr(),
              fluidRow(
                column(12,
-                      p("Benessere"),
+                      h2("Benessere"),
+                      hr(),
                       tableOutput("t6"))
              )
              

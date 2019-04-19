@@ -5,9 +5,9 @@ account: myappshiny
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 829137
-bundleId: 1986243
+bundleId: 1997589
 url: https://myappshiny.shinyapps.io/PRC2018005/
-when: 1554377241.75096
+when: 1554810274.45242
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: codici.R|manifest.json

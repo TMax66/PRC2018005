@@ -66,6 +66,7 @@ fieldsAll6<-c("bmese","bazienda", "bcompl","A","B","C","Biosic","GR")
 
 #####FUNZIONE LOAD DATA- CARICA IL FILE DOPO L'AGGIUNTA DI NUOVI RECORD x dati aziendali#######
 loadData <- function() {
+  Sys.sleep(3)
   sheet <- gs_title("prc2018005")
   ds <-gs_read(sheet, ws="dataset" )
   }
