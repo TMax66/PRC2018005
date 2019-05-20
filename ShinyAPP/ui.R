@@ -468,7 +468,7 @@ ui<-navbarPage("PRC2018005",
            fluidPage(
              sidebarPanel(
                selectInput("codaz", "Codice Aziendale",
-                           c(unique(as.character(d1$azienda))))
+                           c(unique(as.character(d6$azienda))))
              ),
              
              mainPanel(
