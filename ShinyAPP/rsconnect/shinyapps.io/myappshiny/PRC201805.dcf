@@ -1,13 +1,13 @@
-name: PRC2018005
-title: PRC2018005
+name: PRC201805
+title: PRC201805
 username:
 account: myappshiny
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 829137
-bundleId: 2096341
-url: https://myappshiny.shinyapps.io/PRC2018005/
-when: 1558358067.01132
+appId: 938786
+bundleId: 2096654
+url: https://myappshiny.shinyapps.io/PRC201805/
+when: 1558365001.63887
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: codici.R|manifest.json
