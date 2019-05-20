@@ -8,7 +8,7 @@ library(rpivotTable)
 library(timevis)
 library(janitor)
 
-rm(list=ls())
+
 Sys.sleep(5)
 
 
