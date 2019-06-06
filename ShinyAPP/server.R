@@ -339,42 +339,48 @@ server<-function(input, output, session) {
    
    d1 %>% 
      filter(azienda==input$codaz) %>% 
-     select(-azienda)
+     select(-azienda) %>% 
+     arrange(mese)
  )
 
  output$t2<-renderTable(
    
    d2 %>% 
      filter(azienda==input$codaz) %>% 
-     select(-azienda)
+     select(-azienda) %>% 
+     arrange(mese)
  )
 
  output$t3<-renderTable(
   
   d3 %>% 
      filter(azienda==input$codaz) %>% 
-     select(-azienda)
+     select(-azienda)%>% 
+    arrange(mese)
  )
 
  output$t4<-renderTable(
   
    d4 %>% 
      filter(azienda==input$codaz) %>% 
-     select(-azienda)
+     select(-azienda)%>% 
+     arrange(mese)
  )
 
  output$t5<-renderTable(
  
    d5 %>% 
      filter(azienda==input$codaz) %>% 
-     select(-azienda)
+     select(-azienda)%>% 
+     arrange(mese)
  )
 
  output$t6<-renderTable(
   
   d6 %>% 
      filter(azienda==input$codaz) %>% 
-     select(-azienda)
+     select(-azienda)%>% 
+    arrange(mese)
  )
  
  
