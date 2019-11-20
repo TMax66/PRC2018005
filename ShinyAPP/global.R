@@ -8,6 +8,15 @@ library(rpivotTable)
 library(timevis)
 library(janitor)
 
+# token <- gs_auth(cache = FALSE)
+# gd_token()
+# saveRDS(token, file = "googlesheets_token.rds")
+
+gs_auth(token = "googlesheets_token.rds")
+suppressMessages(gs_auth(token = "googlesheets_token.rds", verbose = FALSE))
+
+
+
 
 Sys.sleep(5)
 
