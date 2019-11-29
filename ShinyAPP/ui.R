@@ -55,6 +55,9 @@ ui<-navbarPage("PRC2018005",
                              div(id = "form",
 
                            fluidRow(
+                             
+                             column(2,
+                                    textInput("anno", "Anno", value = "")),
                              column(2,
                                     textInput("mese", "Mese", value = "")),
 
@@ -63,7 +66,30 @@ ui<-navbarPage("PRC2018005",
                              ),
                              column(2,
                                     textInput( "ncapre","N. capre in lattazione", value = "")
+                                  
                              ),
+                             
+                             column(2,
+                                    textInput( "asciutta","N. capre in asciutta", value = "")
+                                    
+                             ),
+
+                             
+                             column(2,
+                                    textInput( "rimonta","N. capre da rimonta ", value = "")
+                                    
+                             ),
+                             
+                             column(2,
+                                    textInput( "capretti","N. capretti", value = "")
+                                    
+                             ),
+                             
+                             column(2,
+                                    textInput( "becchi","N.becchi", value = "")
+                                    
+                             ),
+                             
                              column(2,
                                     textInput( "capog","Kg/capo/die", value = "")
                              ),
@@ -135,6 +161,8 @@ ui<-navbarPage("PRC2018005",
 
                        div(id = "form2",
                           fluidRow(
+                            column(2,
+                                   textInput("manno", "Anno", value = "")),
                             column(2,
                                    textInput("mmese", "Mese", value = "")),
                             
@@ -211,6 +239,8 @@ ui<-navbarPage("PRC2018005",
                               div(id = "form3",
                                   fluidRow(
                                     column(2,
+                                           textInput("sanno", "Anno", value = "")),
+                                    column(2,
                                            textInput("smese", "Mese", value = "")),
 
                                     column(2,
@@ -270,6 +300,8 @@ ui<-navbarPage("PRC2018005",
                       
                       div(id = "form4",
                           fluidRow(
+                            column(2,
+                                   textInput("panno", "Anno", value = "")),
                             column(2,
                                    textInput("pmese", "Mese", value = "")),
                             
@@ -335,6 +367,8 @@ ui<-navbarPage("PRC2018005",
                               div(id = "form5",
                                   fluidRow(
                                     column(2,
+                                           textInput("danno", "Anno", value = "")),
+                                    column(2,
                                            textInput("dmese", "Mese", value = "")),
                                     
                                     column(2,
@@ -399,6 +433,8 @@ ui<-navbarPage("PRC2018005",
                               
                               div(id = "form6",
                                   fluidRow(
+                                    column(2,
+                                           textInput("banno", "Anno", value = "")),
                                     column(2,
                                            textInput("bmese", "Mese", value = "")),
                                     
@@ -484,7 +520,10 @@ ui<-navbarPage("PRC2018005",
              hr(),
              fluidRow(
                column(12,
-                      h2("Latte di massa"),
+                      
+                      div(id='clickdiv',
+                          h2("Latte di massa")),
+                      bsModal("m", "Qualità latte", "clickdiv",plotOutput("pmassa"), size = "large"),
                       hr(),
                       tableOutput("t2"))
              ),
@@ -532,8 +571,7 @@ ui<-navbarPage("PRC2018005",
            
            
            )
-            
-           
+
   )
                
                

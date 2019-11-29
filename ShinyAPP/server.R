@@ -384,8 +384,62 @@ server<-function(input, output, session) {
  )
  
  
+
+ sc<-reactive({d2 %>% 
+   filter(azienda==input$codaz) %>% 
+   group_by(mese) %>% 
+   summarise(scc=geometric.mean(scc, na.rm=T))%>% 
+   ggplot(aes(x=mese, y=scc, group=1))+geom_point()+geom_line()})
  
+ cb<-reactive({d2 %>% 
+   filter(azienda==input$codaz) %>% 
+   group_by(mese) %>% 
+   summarise(cbt=geometric.mean(cbt, na.rm=T))%>% 
+   ggplot(aes(x=mese, y=cbt, group=1))+geom_point()+geom_line()})
  
+ pr<-reactive({d2 %>% 
+   filter(azienda==input$codaz) %>% 
+   group_by(mese) %>% 
+   summarise(proteine=mean(proteine, na.rm=T))%>% 
+   ggplot(aes(x=mese, y=proteine, group=1))+geom_point()+geom_line()})
+
+  gr<-reactive({d2 %>% 
+   filter(azienda==input$codaz) %>% 
+   group_by(mese) %>% 
+   summarise(grasso= mean(grasso, na.rm=T))%>% 
+   ggplot(aes(x=mese, y=grasso, group=1))+geom_point()+geom_line()})
+ 
+  lt<-reactive({d2 %>% 
+   filter(azienda==input$codaz) %>% 
+   group_by(mese) %>% 
+   summarise(lattosio=geometric.mean(lattosio, na.rm=T))%>% 
+   ggplot(aes(x=mese, y=lattosio, group=1))+geom_point()+geom_line()})
+ 
+  cs<-reactive({d2 %>% 
+   filter(azienda==input$codaz) %>% 
+   group_by(mese) %>% 
+   summarise(caseina=mean(caseina, na.rm=T))%>% 
+   ggplot(aes(x=mese, y=caseina, group=1))+geom_point()+geom_line()})
+ 
+ ur<-reactive({
+   d2%>% 
+     filter(azienda==input$codaz)%>% 
+     group_by(mese)%>% 
+     summarise(ureaFTIR=mean(ureaFTIR, na.rm=T),
+               ureapHm=mean(ureapHm, na.rm=T))%>%
+     pivot_longer(-mese, 
+                  names_to = "tecnica", values_to = "urea") %>% 
+     ggplot(aes(x=mese, y=urea,color=tecnica) )+geom_line(aes(group=tecnica))+geom_point()
+   
+ })
+ 
+ p1<-reactive({
+   p1<-plot_grid(sc(),cb(),pr(),gr(),lt(),cs(),ncol = 4)
+ })
+ 
+ output$pmassa<-renderPlot(
+  plot_grid(p1(), ur(), nrow=2)
+ )
  
  
  
