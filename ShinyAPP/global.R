@@ -12,6 +12,7 @@ library(shinydashboard)
 library(gridExtra)
 library(cowplot)
 library(psych)
+library(patchwork)
 options(scipen = 999)
 
 # token <- gs_auth(cache = FALSE)
@@ -43,7 +44,10 @@ d3$mese<-factor(d3$mese, levels=c("gennaio", "febbraio", "marzo", "aprile","magg
 Sys.sleep(2)
 d4 <-gs_read(sheet, ws="par" )
 d4$mese<-factor(d4$mese, levels=c("gennaio", "febbraio", "marzo", "aprile","maggio", "giugno", "luglio", "agosto",
-                                  "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
+                               "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
+names(d4)[c(5,6)]<-c("coccidi", "strongili")
+
+
 Sys.sleep(2)
 d5 <-gs_read(sheet, ws="diagn" )
 d5$mese<-factor(d5$mese, levels=c("gennaio", "febbraio", "marzo", "aprile","maggio", "giugno", "luglio", "agosto",

@@ -538,7 +538,9 @@ ui<-navbarPage("PRC2018005",
              hr(),
              fluidRow(
                column(12,
-                      h2("Parassitologico"),
+                      div(id='clickdiv2',
+                      h2("Parassitologico")),
+                      bsModal("p", "Parassitologico", "clickdiv2",plotOutput("paras"), size = "large"),
                       hr(),
                       tableOutput("t4"))
              ),

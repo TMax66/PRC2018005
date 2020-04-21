@@ -433,13 +433,43 @@ server<-function(input, output, session) {
    
  })
  
- p1<-reactive({
-   p1<-plot_grid(sc(),cb(),pr(),gr(),lt(),cs(),ncol = 4)
- })
+
  
  output$pmassa<-renderPlot(
-  plot_grid(p1(), ur(), nrow=2)
- )
+ ( sc()|cb()|pr()|gr())/(lt()|cs()|ur())
+ 
+     )
+ 
+ 
+ sc<-reactive({d2 %>% 
+     filter(azienda==input$codaz) %>% 
+     group_by(mese) %>% 
+     summarise(scc=geometric.mean(scc, na.rm=T))%>% 
+     ggplot(aes(x=mese, y=scc, group=1))+geom_point()+geom_line()})
+ 
+ 
+ 
+stro<-reactive({ d4 %>% 
+    filter(azienda==input$codaz) %>% 
+    group_by(mese, cat) %>% 
+    summarise(strongili=mean(strongili, na.rm=T))%>% 
+    ggplot(aes(x=mese, y=strongili, group=1))+geom_point()+geom_line()+ facet_wrap(~cat)  }) 
+ 
+ 
+cocc<-reactive({ d4 %>% 
+    filter(azienda==input$codaz) %>% 
+    group_by(mese, cat) %>% 
+    summarise(coccidi=mean(coccidi, na.rm=T))%>% 
+    ggplot(aes(x=mese, y=coccidi, group=1))+geom_point()+geom_line()+ facet_wrap(~cat)  }) 
+
+ 
+output$paras<-renderPlot(
+  ( cocc()/stro())
+)
+ 
+ 
+ 
+ 
  
  
  

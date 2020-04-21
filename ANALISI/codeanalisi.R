@@ -43,6 +43,36 @@ d6$mese<-factor(d6$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "mag
 
 
 
+library(GGally)
+ggpairs(d6[,4:9])
+
+summary(d6$complben)
+sd(d6$complben)^2
+
+summary(d6$areaA)
+sd(d6$areaA)^2
+
+summary(d6$areaB)
+sd(d6$areaB)^2
+
+summary(d6$gr)
+sd(d6$gr)^2
+
+
+d4 %>% 
+    filter(azienda=="039BG069") %>% 
+    group_by(mese, cat) %>% 
+    summarise(strongili=mean(`strongiliGE (upg)`, na.rm=T))%>% 
+    ggplot(aes(x=mese, y=strongili, group=1))+geom_point()+geom_line()+ facet_wrap(~cat)
+
+
+d4 %>% 
+  filter(azienda=="039BG069") %>% 
+  group_by(mese, cat) %>% 
+  summarise(coccidi=mean(`coccidi (upg)`, na.rm=T))%>% 
+  ggplot(aes(x=mese, y=coccidi, group=1))+geom_point()+geom_line()+ facet_wrap(~cat)
+
+
 
 
 ####SCC grafico####
