@@ -2,37 +2,63 @@ library(shiny)
 library(DT)
 library(dplyr)
 library(tidyr)
-library(googlesheets)
 library(ggplot2)
 library(rpivotTable)
 library(timevis)
 library(janitor)
 library(psych)
+library(googledrive)
+library(googlesheets4)
 options(scipen = 999)
 
-gs_auth(token = "googlesheets_token.rds")
-suppressMessages(gs_auth(token = "googlesheets_token.rds", verbose = FALSE))
-sheet <- gs_title("prc2018005")
-d1 <-gs_read(sheet, ws="dataset" )
+#######codici per ottenere l'autorizzazione al drive di google da fare una sola volta###
+#library(googledrive)
+# options(gargle_oauth_cache = ".secrets")
+# gargle::gargle_oauth_cache()
+# drive_auth()
+# list.files(".secrets/")#<---questo codice fa solo vedere il file presente nella cartella .secrets creata dal codice
+##precedente... la cartella .secrets deve essere inserita tra i documenti da mettere nel deploy per le applicazioni shiny
+####################################################################
+
+###eseguibile di routine #####
+
+options(
+  gargle_oauth_cache = ".secrets",
+  gargle_oauth_email = TRUE
+)
+drive_auth()
+sheets_auth(token = drive_token())
+mydrive<-drive_find(type = "spreadsheet") 
+id<-mydrive[1,2]
+#dati<-read_sheet(id$id)
+
+#####     
+d1 <-read_sheet(id$id, sheet ="dataset" )
+d2 <-read_sheet(id$id, sheet ="massa" )
+d3 <-read_sheet(id$id, sheet ="san" )
+d4 <-read_sheet(id$id, sheet ="par" )
+d5 <-read_sheet(id$id, sheet ="diagn" )
+d6 <-read_sheet(id$id, sheet ="ben" )
+
+
+
+
 d1$azienda<-casefold(d1$azienda, upper = TRUE)
 d1$mese<-factor(d1$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio",  "giugno", "luglio", "agosto",
                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
 
-
-d2 <-gs_read(sheet, ws="massa" )
 d2$azienda<-casefold(d2$azienda, upper = TRUE)
 d2$mese<-factor(d2$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-d3 <-gs_read(sheet, ws="san" )
+
 d3$azienda<-casefold(d3$azienda, upper = TRUE)
 d3$mese<-factor(d3$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
 
-d4 <-gs_read(sheet, ws="par" )
 d4$azienda<-casefold(d4$azienda, upper = TRUE)
 d4$mese<-factor(d4$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-d5 <-gs_read(sheet, ws="diagn" )
+
 d5$azienda<-casefold(d5$azienda, upper = TRUE)
 d5$mese<-factor(d5$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
@@ -44,7 +70,7 @@ d6$mese<-factor(d6$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "mag
 
 
 library(GGally)
-ggpairs(d6[,4:9])
+ggpairs(d6[,4:9])+ theme_bw()
 
 summary(d6$complben)
 sd(d6$complben)^2
