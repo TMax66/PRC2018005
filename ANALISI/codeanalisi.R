@@ -47,8 +47,7 @@ d1 <-read_sheet(id$id, sheet ="dataset" ) %>%
 
 d1 %>% 
   group_by(azienda, time) %>% 
-  ggplot(aes(x=time, y=kgcapo))+geom_line()+
-           facet_wrap(~azienda)
+  ggplot(aes(x=time, y=scale(kgcapo), group=azienda))+geom_line()
 
 
 
@@ -66,52 +65,52 @@ d2 %>%
   ggplot(aes(x=time, y=scc, group=azienda))+geom_line()+
   scale_y_log10()
 
+d2 %>% 
+  group_by(azienda, time) %>% 
+  drop_na(proteine) %>% 
+  ggplot(aes(x=time, y=proteine, group=azienda))+geom_line()
+
+d2 %>% 
+  group_by(azienda, time) %>% 
+  drop_na(caseina) %>% 
+  ggplot(aes(x=time, y=caseina, group=azienda))+geom_line()
+
+d2 %>% 
+  group_by(azienda, time) %>% 
+  drop_na(grasso) %>% 
+  ggplot(aes(x=time, y=grasso, group=azienda))+geom_line()
+
+d2 %>% 
+  group_by(azienda, time) %>% 
+  drop_na(lattosio) %>% 
+  ggplot(aes(x=time, y=lattosio, group=azienda))+geom_line()
+
+d2 %>% 
+  group_by(azienda, time) %>% 
+  drop_na(cbt) %>% 
+  ggplot(aes(x=time, y=cbt, group=azienda))+geom_line()+scale_y_log10()
 
 
-  d3 <-read_sheet(id$id, sheet ="san" )
+
+
+
+d3 <-read_sheet(id$id, sheet ="san" )
 d4 <-read_sheet(id$id, sheet ="par" )
 d5 <-read_sheet(id$id, sheet ="diagn" )
+
 d6 <-read_sheet(id$id, sheet ="ben" )
 
 
+library(GGally)
+ggpairs(d6[,4:9])+ theme_bw()
 
 
-# d1$azienda<-casefold(d1$azienda, upper = TRUE)
-# d1$mese<-factor(d1$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio",  "giugno", "luglio", "agosto",
-#                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-# 
-# d2$azienda<-casefold(d2$azienda, upper = TRUE)
-# d2$mese<-factor(d2$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
-#                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-# 
-# d3$azienda<-casefold(d3$azienda, upper = TRUE)
-# d3$mese<-factor(d3$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
-#                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-# 
-# d4$azienda<-casefold(d4$azienda, upper = TRUE)
-# d4$mese<-factor(d4$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
-#                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-# 
-# d5$azienda<-casefold(d5$azienda, upper = TRUE)
-# d5$mese<-factor(d5$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
-#                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-# 
-# d6$azienda<-casefold(d6$azienda, upper = TRUE)
-# d6$mese<-factor(d6$mese, levels=c("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
-#                                   "settembre", "ottobre", "novembre", "dicembre"), ordered=TRUE)
-# 
+
+
 
 
 
 ######
-d1<-d1 %>% 
-  mutate(azienda<-casefold(azienda, upper = TRUE),
-         mese=recode(mese,
-                     gennaio=1,febbraio=2,marzo=3,aprile=4,
-                     maggio=5, giugno=6, luglio=7, agosto=8, settembre=9,
-                     ottobre=10, novembre=11,dicembre=12), 
-         time=as.Date(paste(anno, mese, 15, sep="-")))
-
 
 
 
