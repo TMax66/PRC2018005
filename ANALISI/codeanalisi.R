@@ -13,7 +13,7 @@ library(lubridate)
 options(scipen = 999)
 
 #######codici per ottenere l'autorizzazione al drive di google da fare una sola volta###
-#library(googledrive)
+# library(googledrive)
 # options(gargle_oauth_cache = ".secrets")
 # gargle::gargle_oauth_cache()
 # drive_auth()
@@ -28,7 +28,7 @@ options(
   gargle_oauth_email = TRUE
 )
 drive_auth()
-sheets_auth(token = drive_token())
+gs4_auth(token = drive_token())
 mydrive<-drive_find(type = "spreadsheet") 
 id<-mydrive %>% 
  filter(name=="prc2018005") %>% 
